@@ -67,10 +67,8 @@ OS X optimised mobile Android and iOS development.
 * [`Go`](https://golang.org)
 * [`JDK 7`](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
 * [`JDK 8`](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-* [`Sonar runner`](https://github.com/SonarSource/sonar-runner)
 * [`xcode-install`](https://github.com/neonichu/xcode-install)
-* [`Provisioning Profiles Management utility`](https://github.com/xfreebird/refresh-ios-profiles)
-
+* [`Sonar runner`](https://github.com/SonarSource/sonar-runner)
 
 
 # Upgrading installed software
