@@ -13,10 +13,9 @@ Setup developer workstation for Android and iOS mobile development
 On your developer machine run:
 
 ```shell
-export PASSWORD="osx_user_password"
 export APPLE_USERNAME="apple.developer@mail.com"
 export APPLE_PASSWORD="secret"
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/xfreebird/mobile-dev-bootstrap/master/mobile-dev-bootstrap.sh)"
+bash <(curl -s https://raw.githubusercontent.com/xfreebird/mobile-dev-bootstrap/master/mobile-dev-bootstrap.sh)
 ```
 
 At the end you will have:
