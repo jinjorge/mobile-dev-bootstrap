@@ -5,8 +5,18 @@
 function showActionMessage() { echo "⏳`tput setaf 12` $1 `tput op`"; }
 
 function showMessage() {
-	showActionMessage "$1"
-	osascript -e "display notification \"$1\" with title \"Installer\""
+  showActionMessage "$1"
+  osascript -e "display notification \"$1\" with title \"Installer\""
+}
+
+function cleanUp() {
+  showActionMessage "Revoking passwordless sudo for '$USERNAME'"
+  sudo -S bash -c "cp /etc/sudoers.orig /etc/sudoers"
+  exit 0
+}
+
+function ver() { 
+  printf "%03d%03d%03d%03d" $(echo "$1" | tr '.' ' ') 
 }
 
 function abort() { echo "!!! $@" >&2; exit 1; }
@@ -16,8 +26,29 @@ USERNAME=$(whoami)
 [ "$USERNAME" = "root" ] && abort "Run as yourself, not root."
 groups | grep -q admin || abort "Add $USERNAME to the admin group."
 
+echo -n "Apple Account (e.g. user@mail.com): "
+read APPLE_USERNAME
+
+echo -n "Apple Account Password: "
+read -s APPLE_PASSWORD
+echo 
+
 [[ "$APPLE_USERNAME" == "" ]] && abort "Set APPLE_USERNAME env variable with the email of an Apple Developer Account."
 [[ "$APPLE_PASSWORD" == "" ]] && abort "Set APPLE_PASSWORD env variable with the password of an Apple Developer Account."
+
+#==========================================================
+#==== Enable passwordless sudo
+#==== Very important to have this running without the need
+#==== of user input
+#==========================================================
+showActionMessage "Enabling Temporary passwordless sudo for '$USERNAME'"
+sudo bash -c "cp /etc/sudoers /etc/sudoers.orig; echo '${USERNAME} ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
+
+#==========================================================
+#==== Call cleanUp if the script is stopped, finishes or 
+#==== is terminated
+#==========================================================
+trap cleanUp SIGHUP SIGINT SIGTERM EXIT
 
 showActionMessage "Enabling Developer Mode"
 sudo /usr/sbin/DevToolsSecurity --enable
@@ -114,31 +145,47 @@ showActionMessage "Installing the latest Xcode:"
 export XCODE_INSTALL_USER="$APPLE_USERNAME"
 export XCODE_INSTALL_PASSWORD="$APPLE_PASSWORD"
 xcode-install update
-xcode_version_install="7"
+xcode_version_install=""
+xcode_latest_installed_version=$(xcode-install installed | cut -f1 | tail -n 1)
+
 #get the latest xcode version (non beta)
 for xcode_version in $(xcode-install list | grep -v beta)
 do
-	xcode_version_install=$xcode_version
+  xcode_version_install=$xcode_version
 done
 
-showActionMessage "Xcode $xcode_version:"
-xcode-install install "$xcode_version_install"
-sudo xcodebuild -license accept
+if [ x"$xcode_version_install" != x"" ]; then
+  if [ $(ver "$xcode_version_install") -gt $(ver "$xcode_latest_installed_version") ];
+  then
+    showActionMessage "Xcode $xcode_version:"
+    xcode-install install "$xcode_version_install"
+    sudo xcodebuild -license accept
+  fi
+fi
 
 #==========================================================
 #==== Install Brew packages
 #==========================================================
 showActionMessage "Installing brew packages"
+brew update
+brew upgrade
+
 brew cask install oclint java java7
 
 brew install \
+git bash-completion \
 lcov gcovr ios-sim \
 node go xctool swiftlint \
 android-sdk android-ndk findbugs sonar-runner maven30 ant gradle \
 splunk-mobile-upload nexus-upload \
-iosbuilder crashlytics-upload-ipa
+iosbuilder crashlytics-upload-ipa \
+mobile-dev-update
 
 brew install carthage
+
+echo '# Command prompt' >> ~/.profile
+echo 'source /usr/local/etc/bash_completion'  >> ~/.profile
+echo "PS1='\[\\033[01;32m\]\u@\h\[\\033[00m\]:\[\\033[01;33m\]\w\[\\033[00m\]\[\\033[01;31m\]\$(__git_ps1 \" (%s)\")\[\\033[00m\]\$ '" >> ~/.profile
 
 showActionMessage "Installing npm packages"
 npm install -g appium wd npm-check-updates cordova phonegap
@@ -150,16 +197,16 @@ showActionMessage "Installing additional Android SDK components. \
 Except Emulators, Documentation, Sources, Obsolete packages, Web Driver, Glass and Android TV"
 packages=""
 for package in $(android list sdk --all | \
-	grep -v -e "Obsolete" -e "Sources" -e  "x86" -e  "Samples" \
-	-e "ARM EABI" -e "ARM System Image" -e "API 8" -e "API 8" -e "API 10" -e "API 15" \
-	-e "API 16" -e "API 17" -e "API 18"  -e "API 20" -e "rc" \
-	-e  "Documentation" -e  "MIPS" -e "Android TV" \
-	-e "Build-tools, revision 19.1" -e "Build-tools, revision 20" -e "Build-tools, revision 21.1.2" \
-	-e  "Glass" -e  "XML" -e  "URL" -e  "Packages available" \
-	-e  "Fetch" -e  "Web Driver" | \
-	cut -d'-' -f1)
+  grep -v -e "Obsolete" -e "Sources" -e  "x86" -e  "Samples" \
+  -e "ARM EABI" -e "ARM System Image" -e "API 8" -e "API 8" -e "API 10" -e "API 15" \
+  -e "API 16" -e "API 17" -e "API 18"  -e "API 20" -e "rc" \
+  -e  "Documentation" -e  "MIPS" -e "Android TV" \
+  -e "Build-tools, revision 19.1" -e "Build-tools, revision 20" -e "Build-tools, revision 21.1.2" \
+  -e  "Glass" -e  "XML" -e  "URL" -e  "Packages available" \
+  -e  "Fetch" -e  "Web Driver" | \
+  cut -d'-' -f1)
 do
-   	packages=$(printf "${packages},${package}")
+    packages=$(printf "${packages},${package}")
 done
 
 ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --all --no-ui --filter "$packages"
