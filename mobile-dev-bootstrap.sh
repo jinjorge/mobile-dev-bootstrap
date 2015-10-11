@@ -71,6 +71,8 @@ echo 'export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:$ANDROID_HOM
 echo 'if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi' >> ~/.profile
 source ~/.profile
 
+ln -s ~/.profile ~/.bashrc
+
 #==========================================================
 #==== Update OSX
 #==========================================================
@@ -182,6 +184,8 @@ iosbuilder crashlytics-upload-ipa \
 mobile-dev-update
 
 brew install carthage
+
+git config --global credential.helper osxkeychain
 
 echo '# Command prompt' >> ~/.profile
 echo 'source /usr/local/etc/bash_completion'  >> ~/.profile
