@@ -124,13 +124,13 @@ source ~/.profile
 showActionMessage "Installing rbenv Gems"
 ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | gem update -p
 ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | gem install bundler \
-ocunit2junit nomad-cli cocoapods xcpretty xcode-install slather cloc \
+ocunit2junit nomad-cli cocoapods xcpretty xcode-install slather cloc synx \
 fastlane deliver snapshot frameit pem sigh produce cert codes spaceship pilot gym \
 calabash-cucumber calabash-android
 
 # temporary fix for cocoapods 
 # https://github.com/CocoaPods/CocoaPods/issues/2908
-gem uninstall psych
+gem uninstall psych --all
 gem install psych -v 2.0.0
 
 #==========================================================
