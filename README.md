@@ -86,7 +86,7 @@ Available options are:
 
 ## Java enviroment
 
-The Jave environment is controlled by ```jenv```.
+The Java environment is controlled by ```jenv```.
 
 To get current java versions:
 ```shell
