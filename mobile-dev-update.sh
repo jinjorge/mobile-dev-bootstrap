@@ -89,6 +89,17 @@ function updateBrewPackages() {
   brew upgrade
 }
 
+function updateCasks() {
+  brew update
+  brew upgrade cask
+  for file in $(brew cask list) ; do brew cask install $file --force; done
+
+  for java_home in $(/usr/libexec/java_home -V 2>&1 | uniq | grep -v Matching | grep "Java SE" | cut -f3 | sort)
+  do
+    ( sleep 1 && while [ 1 ]; do sleep 1; echo y; done ) | jenv add "$java_home"
+  done
+}
+
 function updateRubyPackages() {
   gem update -p
   
@@ -104,8 +115,8 @@ function updateNPMPackages() {
 
 function updateAll() {
   enablePasswordlessSudo
-  updateOSX
   updateXcode
+  updateOSX
   updatePHPPackages
   updateBrewPackages
   updateAndroidSDK
@@ -128,6 +139,9 @@ case "$1" in
       ;;
   brew) updateBrewPackages
         updateAndroidSDK
+      ;;
+  cask) enablePasswordlessSudo
+        updateCasks
       ;;
   gem) updateRubyPackages
       ;;
