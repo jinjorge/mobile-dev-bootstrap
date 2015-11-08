@@ -114,6 +114,7 @@ function updateRubyPackages() {
 }
 
 function updateNPMPackages() {
+  npm install npm@latest -g
   npm update -g
 }
 

@@ -212,6 +212,7 @@ echo 'source /usr/local/etc/bash_completion'  >> ~/.profile
 echo "PS1='\[\\033[01;32m\]\u@\h\[\\033[00m\]:\[\\033[01;33m\]\w\[\\033[00m\]\[\\033[01;31m\]\$(__git_ps1 \" (%s)\")\[\\033[00m\]\$ '" >> ~/.profile
 
 showActionMessage "Installing npm packages"
+npm install npm@latest -g
 npm install -g appium wd npm-check-updates cordova phonegap
 
 #==========================================================
