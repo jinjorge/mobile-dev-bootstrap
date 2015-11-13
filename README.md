@@ -18,7 +18,7 @@ bash <(curl -s https://raw.githubusercontent.com/xfreebird/mobile-dev-bootstrap/
 
 At the end you will have:
 
-* **Android** and **iOS** 📱 developemnt ready environment
+* **Android** and **iOS** 📱 development ready environment
 
 
 # Why ?
