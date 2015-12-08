@@ -25,6 +25,15 @@ function ver() {
   printf "%03d%03d%03d%03d" $(echo "$1" | tr '.' ' ') 
 }
 
+function updateXcodeBuildTools() {
+  # https://github.com/timsutton/osx-vm-templates/blob/master/scripts/xcode-cli-tools.sh
+  touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+  PROD=$(softwareupdate -l | grep "\*.*Command Line" | head -n 1 | awk -F"*" '{print $2}' | sed -e 's/^ *//' | tr -d '\n')
+  softwareupdate -i "$PROD" -v
+  rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+}
+
+
 function updateXcode() {
 
   echo -n "Apple Account (e.g. user@mail.com): "
@@ -60,6 +69,7 @@ function updateXcode() {
   if [ $(ver $xcode_version_install) -gt $(ver "$xcode_version_installed") ]; then
     xcode-install install "$xcode_version_install"
     sudo xcodebuild -license accept
+    updateXcodeBuildTools
   fi
 }
 
@@ -73,7 +83,7 @@ function updateAndroidSDK() {
     grep -v -e "Obsolete" -e "Sources" -e  "x86" -e  "Samples" \
     -e  "Documentation" -e  "MIPS" -e  "Android TV" \
     -e  "Glass" -e  "XML" -e  "URL" -e  "Packages available" \
-    -e  "Fetch" -e  "Web Driver" | \
+    -e  "Fetch" -e  "Web Driver"  -e "GPU Debugging" -e "Android Auto" | \
     cut -d'-' -f1)
   do
     packages=$(printf "${packages},${package}")
@@ -82,11 +92,20 @@ function updateAndroidSDK() {
   if [[ $packages != "" ]]; then
     ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --no-ui --filter "$packages"
   fi
+
+  ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --all --no-ui --filter platform-tools
 }
 
 function updateBrewPackages() {
+  current_android_sdk_version=$(brew list --versions | grep android-sdk | rev | cut -d' ' -f 1 | rev)
   brew update
   brew upgrade
+  new_android_sdk_version=$(brew list --versions | grep android-sdk | rev | cut -d' ' -f 1 | rev)
+
+  if [ x"$current_android_sdk_version" != x"$new_android_sdk_version" ]
+  then
+    updateAndroidSDK
+  fi
 }
 
 function updateCasks() {
@@ -139,7 +158,6 @@ case "$1" in
   android) updateAndroidSDK
       ;;
   brew) updateBrewPackages
-        updateAndroidSDK
       ;;
   cask) enablePasswordlessSudo
         updateCasks
