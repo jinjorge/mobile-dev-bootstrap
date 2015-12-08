@@ -96,7 +96,16 @@ function updateAndroidSDK() {
     ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --no-ui --filter "$packages"
   fi
 
-  ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --all --no-ui --filter platform-tools
+  packages=""
+  for package in $(android list sdk --no-ui -a | grep -v "Obsolete" | grep -e "Build-tools" -e "Platform-tools" | \
+    cut -d'-' -f1)
+  do
+    packages=$(printf "${packages},${package}")
+  done
+
+  if [[ $packages != "" ]]; then
+    ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk -a --no-ui --filter "$packages"
+  fi
 }
 
 function updateBrewPackages() {
