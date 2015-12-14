@@ -131,7 +131,7 @@ showActionMessage "Installing rbenv Gems"
 ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | gem update -p
 ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | gem install bundler \
 ocunit2junit nomad-cli cocoapods xcpretty xcode-install slather cloc synx \
-fastlane codes calabash-cucumber calabash-android
+fastlane calabash-cucumber calabash-android
 
 # temporary fix for cocoapods
 # https://github.com/CocoaPods/CocoaPods/issues/2908
