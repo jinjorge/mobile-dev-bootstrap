@@ -15,8 +15,8 @@ function cleanUp() {
   exit 0
 }
 
-function ver() { 
-  printf "%03d%03d%03d%03d" $(echo "$1" | tr '.' ' ') 
+function ver() {
+  printf "%03d%03d%03d%03d" $(echo "$1" | tr '.' ' ')
 }
 
 function abort() { echo "!!! $@" >&2; exit 1; }
@@ -31,7 +31,7 @@ read APPLE_USERNAME
 
 echo -n "Apple Account Password: "
 read -s APPLE_PASSWORD
-echo 
+echo
 
 [[ "$APPLE_USERNAME" == "" ]] && abort "Set APPLE_USERNAME env variable with the email of an Apple Developer Account."
 [[ "$APPLE_PASSWORD" == "" ]] && abort "Set APPLE_PASSWORD env variable with the password of an Apple Developer Account."
@@ -45,7 +45,7 @@ showActionMessage "Enabling Temporary passwordless sudo for '$USERNAME'"
 sudo bash -c "cp /etc/sudoers /etc/sudoers.orig; echo '${USERNAME} ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
 
 #==========================================================
-#==== Call cleanUp if the script is stopped, finishes or 
+#==== Call cleanUp if the script is stopped, finishes or
 #==== is terminated
 #==========================================================
 trap cleanUp SIGHUP SIGINT SIGTERM EXIT
@@ -78,12 +78,12 @@ ln -s ~/.profile ~/.bashrc
 #==== Update OSX
 #==========================================================
 showActionMessage "Updating the operating system"
-sudo softwareupdate -i -a -v 
+sudo softwareupdate -i -a -v
 
 #==========================================================
 #==== Upgrade system Ruby
 #==========================================================
-( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | sudo gem update -p
+( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | gem update -p
 
 #==========================================================
 #==== Install Xcode command line tools
@@ -134,7 +134,7 @@ ocunit2junit nomad-cli cocoapods xcpretty xcode-install slather cloc synx \
 fastlane deliver snapshot frameit pem sigh produce cert codes spaceship pilot gym \
 calabash-cucumber calabash-android
 
-# temporary fix for cocoapods 
+# temporary fix for cocoapods
 # https://github.com/CocoaPods/CocoaPods/issues/2908
 gem uninstall psych --all
 gem install psych -v 2.0.0
@@ -239,4 +239,3 @@ done
 
 
 showMessage "Done!"
-
