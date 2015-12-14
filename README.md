@@ -3,7 +3,7 @@ Setup developer workstation for Android and iOS mobile development
 
 # Requirements
 
-* A fresh installed OS X 10.10+ 
+* A fresh installed OS X 10.10+
 * User with admin rights
 * Apple developer account (for Xcode)
 * Internet connection
@@ -23,7 +23,7 @@ At the end you will have:
 
 # Why ?
 
-**To save time** 
+**To save time**
 
 All the process is automated, it asks the user password and Apple Developer password at the beginning.
 
@@ -38,10 +38,10 @@ OS X optimised mobile Android and iOS development.
 
 ## iOS
 * [`Xcode`](https://developer.apple.com/xcode/download/) [`xctool`](https://github.com/facebook/xctool) [`Cocoapods`](http://cocoapods.org) [`Carthage`](https://github.com/Carthage/Carthage)
-* [Fastlane](https://fastlane.tools) bundle: [`fastlane`](https://github.com/KrauseFx/fastlane) [`deliver`](https://github.com/KrauseFx/deliver) [`snapshot`](https://github.com/KrauseFx/snapshot) [`frameit`](https://github.com/fastlane/frameit) [`pem`](https://github.com/fastlane/PEM) [`sigh`](https://github.com/KrauseFx/sigh) [`produce`](https://github.com/fastlane/produce) [`cert`](https://github.com/fastlane/cert) [`codes`](https://github.com/fastlane/codes) [`spaceship`](https://github.com/fastlane/spaceship) [`pilot`](https://github.com/fastlane/pilot) [`gym`](https://github.com/fastlane/gym)
+* [Fastlane](https://fastlane.tools) bundle: [`fastlane`](https://github.com/fastlane/fastlane) [`deliver`](https://github.com/fastlane/deliver) [`snapshot`](https://github.com/fastlane/snapshot) [`frameit`](https://github.com/fastlane/frameit) [`pem`](https://github.com/fastlane/pem) [`sigh`](https://github.com/fastlane/sigh) [`produce`](https://github.com/fastlane/produce) [`cert`](https://github.com/fastlane/cert) [`codes`](https://github.com/fastlane/codes) [`spaceship`](https://github.com/fastlane/spaceship) [`pilot`](https://github.com/fastlane/pilot) [`gym`](https://github.com/fastlane/gym) [`match`](https://github.com/fastlane/match)
 * [nomad-cli](http://nomad-cli.com) bundle: [`ios`](https://github.com/nomad/Cupertino) [`apn`](https://github.com/nomad/Houston) [`pk`](https://github.com/nomad/Dubai) [`iap`](https://github.com/nomad/Venice) [`ipa`](https://github.com/nomad/Shenzhen)
 * Code quality tools: [`oclint`](http://oclint.org) [`lcov`](http://ltp.sourceforge.net/coverage/lcov.php) [`gcovr`](http://gcovr.com) [`slather`](https://github.com/venmo/slather) [`cloc`](http://cloc.sourceforge.net) [`swiftlint`](https://github.com/realm/SwiftLint)
-* XCTest utilities: [`ocunit2junit`](https://github.com/ciryon/OCUnit2JUnit)  [`xcpretty`](https://github.com/supermarin/xcpretty) 
+* XCTest utilities: [`ocunit2junit`](https://github.com/ciryon/OCUnit2JUnit)  [`xcpretty`](https://github.com/supermarin/xcpretty)
 * Simulator utility: [`ios-sim`](https://github.com/phonegap/ios-sim)
 * Other utilities: [`synx`](https://github.com/venmo/synx) [`splunk-mobile-upload`](https://github.com/xfreebird/splunk-mobile-upload) [`nexus-upload`](https://github.com/xfreebird/nexus-upload) [`crashlytics-upload-ipa`](https://github.com/xfreebird/crashlytics-upload-ipa) [`iosbuilder`](https://github.com/xfreebird/iosbuilder)
 
@@ -57,7 +57,7 @@ OS X optimised mobile Android and iOS development.
 * [`brew`](http://brew.sh) [`rbenv`](https://github.com/sstephenson/rbenv) [`jenv`](https://github.com/gcuisinier/jenv) [`Go`](https://golang.org) [`Node.js`](https://nodejs.org/en/)
 * [`JDK 7`](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)[`JDK 8`](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * [`Sonar runner`](https://github.com/SonarSource/sonar-runner)
-* [`xcode-install`](https://github.com/neonichu/xcode-install) 
+* [`xcode-install`](https://github.com/neonichu/xcode-install)
 
 # Upgrading installed software
 
@@ -134,9 +134,9 @@ done
 ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --no-ui --filter "$packages"
 ```
 
-### Xcode 
+### Xcode
 
-All installed Xcodes are following the ```Xcode-<version>.app``` naming convention. 
+All installed Xcodes are following the ```Xcode-<version>.app``` naming convention.
 The ```/Applications/Xcode.app``` is a symbolic link to the current default Xcode.
 
 To install a new version of Xcode use ```xcode-install```:
@@ -192,4 +192,3 @@ Update all packages:
 ```shell
 npm update -g
 ```
-
