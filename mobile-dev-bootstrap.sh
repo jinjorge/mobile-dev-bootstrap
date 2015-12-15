@@ -19,6 +19,15 @@ function ver() {
   printf "%03d%03d%03d%03d" $(echo "$1" | tr '.' ' ')
 }
 
+function updateXcodeBuildTools() {
+  showActionMessage "Installing Xcode command line tools."
+  # https://github.com/timsutton/osx-vm-templates/blob/master/scripts/xcode-cli-tools.sh
+  touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+  PROD=$(softwareupdate -l | grep "\*.*Command Line" | head -n 1 | awk -F"*" '{print $2}' | sed -e 's/^ *//' | tr -d '\n')
+  softwareupdate -i "$PROD" -v
+  rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+}
+
 function abort() { echo "!!! $@" >&2; exit 1; }
 
 USERNAME=$(whoami)
@@ -89,12 +98,7 @@ sudo softwareupdate -i -a -v
 #==== Install Xcode command line tools
 #==== Required by Brew and Ruby Gems
 #==========================================================
-showActionMessage "Installing Xcode command line tools."
-# https://github.com/timsutton/osx-vm-templates/blob/master/scripts/xcode-cli-tools.sh
-sudo touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-PROD=$(softwareupdate -l | grep "\*.*Command Line" | head -n 1 | awk -F"*" '{print $2}' | sed -e 's/^ *//' | tr -d '\n')
-sudo softwareupdate -i "$PROD" -v
-sudo rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+updateXcodeBuildTools
 
 #==========================================================
 #==== Install Brew and taps
@@ -167,6 +171,7 @@ if [ x"$xcode_version_install" != x"" ]; then
     showActionMessage "Xcode $xcode_version:"
     xcversion install "$xcode_version_install"
     sudo xcodebuild -license accept
+    updateXcodeBuildTools
   fi
 fi
 
