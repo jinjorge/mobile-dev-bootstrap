@@ -1,3 +1,7 @@
+Why this fork?
+--------------
+This fork is slightly different than the original in that is supports true sudo-less install of Gems
+
 # mobile-dev-bootstrap
 Setup developer workstation for Android and iOS mobile development
 
@@ -13,7 +17,7 @@ Setup developer workstation for Android and iOS mobile development
 On your developer machine run:
 
 ```shell
-bash <(curl -s https://raw.githubusercontent.com/xfreebird/mobile-dev-bootstrap/master/mobile-dev-bootstrap.sh)
+bash <(curl -s https://raw.githubusercontent.com/jinjorge/mobile-dev-bootstrap/master/mobile-dev-bootstrap.sh)
 ```
 
 At the end you will have:
